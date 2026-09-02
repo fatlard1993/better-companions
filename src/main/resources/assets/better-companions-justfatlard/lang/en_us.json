@@ -1,0 +1,16 @@
+{
+ "message.better-companions-justfatlard.staying": "%s will wait here",
+ "message.better-companions-justfatlard.following": "%s is coming with you",
+ "message.better-companions-justfatlard.whistle": "Called %s companion(s)",
+ "message.better-companions-justfatlard.whistle.none": "Nothing answered",
+ "command.better-companions-justfatlard.friend.added": "Added %s permanent friend(s)",
+ "command.better-companions-justfatlard.friend.removed": "%s is no longer a permanent friend",
+ "command.better-companions-justfatlard.friend.unknown": "No permanent friend called %s",
+ "command.better-companions-justfatlard.friend.none": "No permanent friends yet",
+ "command.better-companions-justfatlard.friend.list": "%s permanent friend(s): %s",
+ "key.better-companions-justfatlard.whistle": "Whistle for Companions",
+ "command.better-companions-justfatlard.unequip": "Took the armour off %s",
+ "command.better-companions-justfatlard.unequip.none": "No armoured companion nearby",
+ "message.better-companions-justfatlard.pet.none": "Nothing of yours within reach",
+ "key.better-companions-justfatlard.pet": "Pet Companion"
+}

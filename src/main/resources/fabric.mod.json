@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "better-companions-justfatlard",
+  "version": "${version}",
+  "name": "Better Companions",
+  "description": "Seventeen animals can be befriended and will follow, wait and fight alongside you, the way only a wolf could before.",
+  "authors": [
+    "justfatlard"
+  ],
+  "contact": {
+    "sources": "https://github.com/fatlard1993/better-companions"
+  },
+  "license": "MIT",
+  "icon": "assets/better-companions-justfatlard/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "justfatlard.better_companions.Main"
+    ]
+  },
+  "mixins": [
+    "better-companions-justfatlard.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loaderVersion}",
+    "fabric-api": "${fabricApiVersion}",
+    "minecraft": "${minecraftDependency}",
+    "java": ">=25",
+    "pandorical": "*"
+  },
+  "suggests": {
+    "block-tip": "*"
+  }
+}

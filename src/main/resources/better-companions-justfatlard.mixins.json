@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "justfatlard.better_companions.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": [
+		"MobAccessor"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

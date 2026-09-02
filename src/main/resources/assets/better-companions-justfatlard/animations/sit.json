@@ -1,0 +1,46 @@
+{
+	"length": 0.4,
+	"looping": false,
+	"bones": {
+		"body": [
+			{ "target": "position",
+			  "keyframes": [
+				{ "time": 0.0, "value": [0, 0, 0] },
+				{ "time": 0.4, "value": [0, 2, 0], "interpolation": "catmullrom" }
+			  ] },
+			{ "target": "rotation",
+			  "keyframes": [
+				{ "time": 0.0, "value": [0, 0, 0] },
+				{ "time": 0.4, "value": [12, 0, 0], "interpolation": "catmullrom" }
+			  ] }
+		],
+		"right_hind_leg": [
+			{ "target": "rotation",
+			  "keyframes": [
+				{ "time": 0.0, "value": [0, 0, 0] },
+				{ "time": 0.4, "value": [-75, 0, 0], "interpolation": "catmullrom" }
+			  ] }
+		],
+		"left_hind_leg": [
+			{ "target": "rotation",
+			  "keyframes": [
+				{ "time": 0.0, "value": [0, 0, 0] },
+				{ "time": 0.4, "value": [-75, 0, 0], "interpolation": "catmullrom" }
+			  ] }
+		],
+		"right_leg": [
+			{ "target": "rotation",
+			  "keyframes": [
+				{ "time": 0.0, "value": [0, 0, 0] },
+				{ "time": 0.4, "value": [-55, 0, 0], "interpolation": "catmullrom" }
+			  ] }
+		],
+		"left_leg": [
+			{ "target": "rotation",
+			  "keyframes": [
+				{ "time": 0.0, "value": [0, 0, 0] },
+				{ "time": 0.4, "value": [-55, 0, 0], "interpolation": "catmullrom" }
+			  ] }
+		]
+	}
+}
