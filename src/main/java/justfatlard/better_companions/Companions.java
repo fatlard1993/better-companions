@@ -92,6 +92,18 @@ public final class Companions {
 		setState(mob, stateOf(mob).withOwner(player.getUUID()));
 	}
 
+	/** A mob that is not out to get anyone: an animal, a villager, a golem. Never a monster or a person. */
+	public static boolean isPassive(LivingEntity mob) {
+		return mob instanceof net.minecraft.world.entity.Mob
+			&& !(mob instanceof net.minecraft.world.entity.monster.Enemy);
+	}
+
+	/** Whether this owner's companions stay out of fights with passive mobs altogether. */
+	public static boolean sparesPassive(Player owner) {
+		return owner instanceof net.minecraft.server.level.ServerPlayer player
+			&& Main.SPARE_PASSIVE != null && Boolean.TRUE.equals(Main.SPARE_PASSIVE.get(player));
+	}
+
 	/**
 	 * Whether an attack should be taken personally.
 	 *

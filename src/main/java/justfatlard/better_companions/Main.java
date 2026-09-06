@@ -20,6 +20,9 @@ import org.slf4j.LoggerFactory;
  * everything else that knows about cows keeps working.
  */
 public class Main implements ModInitializer {
+	/** Per player: whether their companions leave passive mobs alone altogether. */
+	public static justfatlard.pandorical.api.SettingsApi.Setting<Boolean> SPARE_PASSIVE;
+
 
 	public static final String MOD_ID = "better-companions-justfatlard";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
@@ -34,9 +37,14 @@ public class Main implements ModInitializer {
 			if (entity instanceof Mob mob && CompanionGoals.shouldInstall(mob)) {
 				CompanionGoals.install(mob);
 			}
+			if (entity instanceof Mob mob && Companions.hasOwner(mob)) {
+				CompanionArmor.show(mob);
+			}
 		});
 
 		UseEntityCallback.EVENT.register(TameInteraction::onUseEntity);
+
+		CompanionArmor.dress();
 
 		// Every blow a person lands on a companion is remembered, so the second one within a few
 		// seconds can be told from the first.
@@ -50,6 +58,26 @@ public class Main implements ModInitializer {
 		// Riding, the way this server wants it. Both need the rider's own client to agree - it is
 		// the client that decides where a mount goes - so Pandorical carries them rather than this
 		// mod applying them to a server nobody's client is listening to.
+		// The player's own friends, readable and prunable from the menu; adding stays with the
+		// command, which knows how to look a player up by name.
+		// Whether the pack joins in against animals at all. Off, a swing at a cow is the owner's
+		// own business and the dogs stay out of it; the animals the owner has fed lately are
+		// left alone either way (see Fed).
+		SPARE_PASSIVE = PandoricalApi.settings().group(MOD_ID, "Better Companions")
+			.toggle("spare_passive", "Leave passive mobs alone", false)
+			.describe("Your companions never join a fight against an animal or villager; they still defend themselves");
+		Fed.init();
+
+		PandoricalApi.settings().group(MOD_ID, "Better Companions")
+			.list("friends", "Friends",
+				player -> {
+					java.util.Map<String, String> named = new java.util.LinkedHashMap<>();
+					Friends.get(player.level()).of(player.getUUID())
+						.forEach((id, name) -> named.put(id.toString(), name));
+					return named;
+				},
+				(player, id) -> Friends.get(player.level()).remove(player.getUUID(), java.util.UUID.fromString(id)))
+			.describe("Your companions never turn on them, whoever swung first; /companions friend add names one");
 		PandoricalApi.mounts().doubleRiders(true);
 		PandoricalApi.mounts().freeLook(true);
 

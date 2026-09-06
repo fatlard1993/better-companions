@@ -17,16 +17,16 @@ import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 
 /**
- * People a companion will never turn on, whatever happens.
+ * People a player's companions will never turn on, whatever happens.
  *
- * <p>Two kinds, and they answer the same question. A permanent friend is named by command and is
- * remembered for good. A team-mate is anyone the game already says is on the owner's side - reading
- * vanilla's own teams rather than asking a server to keep a second list that means the same thing,
- * and getting scoreboard teams, plugins and anything else that sets them for free.
+ * <p>Two kinds, and they answer the same question. A named friend is somebody the owner has
+ * said is on their side, so a stray hit from them - a misjudged swing in a fight, an arrow
+ * through a doorway - is not a reason for the dogs to go for their throat. A team-mate is
+ * anyone the game already says is on the owner's side, read from vanilla's own teams rather
+ * than kept as a second list that means the same thing.
  *
- * <p>The list is deliberately one list, not one per player. A companion that mauls the person who
- * runs the server is everybody's problem, and the answer to it should not have to be repeated by
- * every owner in turn.
+ * <p>Each player names their own friends. Who you trust around your animals is your call, and
+ * a friend of one owner is no promise about anyone else's pack.
  */
 public final class Friends extends SavedData {
 
@@ -40,52 +40,80 @@ public final class Friends extends SavedData {
 		).apply(instance, Friend::new));
 	}
 
+	/** One owner and the friends they named. */
+	private record Owner(UUID id, List<Friend> friends) {
+		static final Codec<Owner> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			UUIDUtil.CODEC.fieldOf("owner").forGetter(Owner::id),
+			Friend.CODEC.listOf().fieldOf("friends").forGetter(Owner::friends)
+		).apply(instance, Owner::new));
+	}
+
+	/**
+	 * Under a new field: what was here before was one list for the whole server, and an old
+	 * file reads as nobody having named anyone yet rather than as a broken file.
+	 */
 	private static final Codec<Friends> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-		Friend.CODEC.listOf().optionalFieldOf("friends", List.of()).forGetter(Friends::asList)
+		Owner.CODEC.listOf().optionalFieldOf("owners", List.of()).forGetter(Friends::asList)
 	).apply(instance, Friends::new));
 
 	private static final SavedDataType<Friends> TYPE = new SavedDataType<>(
 		Identifier.parse(STORAGE_KEY), Friends::new, CODEC, DataFixTypes.LEVEL);
 
-	private final Map<UUID, String> friends = new LinkedHashMap<>();
+	private final Map<UUID, Map<UUID, String>> byOwner = new LinkedHashMap<>();
 
 	private Friends() {}
 
-	private Friends(List<Friend> saved) {
-		for (Friend friend : saved) friends.put(friend.id(), friend.name());
+	private Friends(List<Owner> saved) {
+		for (Owner owner : saved) {
+			Map<UUID, String> friends = new LinkedHashMap<>();
+			for (Friend friend : owner.friends()) friends.put(friend.id(), friend.name());
+			byOwner.put(owner.id(), friends);
+		}
 	}
 
 	public static Friends get(ServerLevel level) {
 		return level.getServer().overworld().getDataStorage().computeIfAbsent(TYPE);
 	}
 
-	private List<Friend> asList() {
-		List<Friend> out = new ArrayList<>(friends.size());
-		friends.forEach((id, name) -> out.add(new Friend(id, name)));
+	private List<Owner> asList() {
+		List<Owner> out = new ArrayList<>(byOwner.size());
+		byOwner.forEach((owner, friends) -> {
+			List<Friend> named = new ArrayList<>(friends.size());
+			friends.forEach((id, name) -> named.add(new Friend(id, name)));
+			out.add(new Owner(owner, named));
+		});
 		return out;
 	}
 
-	public boolean add(UUID id, String name) {
-		if (friends.containsKey(id)) return false;
+	/** @return true where this was not already a friend of the owner's */
+	public boolean add(UUID owner, UUID friend, String name) {
+		Map<UUID, String> friends = byOwner.computeIfAbsent(owner, id -> new LinkedHashMap<>());
+		if (friends.containsKey(friend)) return false;
 
-		friends.put(id, name);
+		friends.put(friend, name);
 		setDirty();
 		return true;
 	}
 
-	public boolean remove(UUID id) {
-		if (friends.remove(id) == null) return false;
+	/** @return true where this was a friend of the owner's and now is not */
+	public boolean remove(UUID owner, UUID friend) {
+		Map<UUID, String> friends = byOwner.get(owner);
+		if (friends == null || friends.remove(friend) == null) return false;
 
+		if (friends.isEmpty()) byOwner.remove(owner);
 		setDirty();
 		return true;
 	}
 
-	public Map<UUID, String> all() {
-		return friends;
+	/** The owner's friends, id to name, in the order they were named. */
+	public Map<UUID, String> of(UUID owner) {
+		Map<UUID, String> friends = byOwner.get(owner);
+		return friends == null ? Map.of() : Map.copyOf(friends);
 	}
 
-	public boolean contains(UUID id) {
-		return friends.containsKey(id);
+	public boolean contains(UUID owner, UUID friend) {
+		Map<UUID, String> friends = byOwner.get(owner);
+		return friends != null && friends.containsKey(friend);
 	}
 
 	/**
@@ -108,14 +136,14 @@ public final class Friends extends SavedData {
 
 		if (!(owner.level() instanceof ServerLevel level)) return false;
 
-		// A named friend, or somebody else's companion whose owner is a named friend - turning on
+		// A friend the owner named, or somebody else's companion whose owner is one - turning on
 		// a friend's dog is the same unkindness as turning on the friend.
 		Friends list = get(level);
 		if (target instanceof net.minecraft.world.entity.player.Player player) {
-			return list.contains(player.getUUID());
+			return list.contains(owner.getUUID(), player.getUUID());
 		}
 
 		UUID theirOwner = Companions.ownerOf(target);
-		return theirOwner != null && (theirOwner.equals(owner.getUUID()) || list.contains(theirOwner));
+		return theirOwner != null && (theirOwner.equals(owner.getUUID()) || list.contains(owner.getUUID(), theirOwner));
 	}
 }

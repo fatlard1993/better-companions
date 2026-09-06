@@ -1,0 +1,12 @@
+{
+   "model": {
+      "type": "minecraft:model",
+      "model": "better-companions-justfatlard:item/leather_companion_armor",
+      "tints": [
+         {
+            "type": "minecraft:dye",
+            "default": -6265536
+         }
+      ]
+   }
+}

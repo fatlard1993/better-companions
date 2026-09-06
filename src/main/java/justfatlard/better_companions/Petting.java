@@ -57,6 +57,17 @@ public final class Petting {
 		return 1;
 	}
 
+	/** A hand laid on this one in particular: the click, with nothing in the hand and no crouch. */
+	public static boolean pet(ServerPlayer player, Mob companion) {
+		if (!(player.level() instanceof ServerLevel level)) return false;
+		long now = System.currentTimeMillis();
+		Long previous = lastPet.get(player.getUUID());
+		if (previous != null && now - previous < COOLDOWN_MS) return true;
+		lastPet.put(player.getUUID(), now);
+		fussOver(level, player, companion);
+		return true;
+	}
+
 	/** Hearts, a pleased noise, and a moment of looking up at you. */
 	private static void fussOver(ServerLevel level, ServerPlayer player, Mob companion) {
 		PandoricalApiBridge.playPetAnimation(companion);
@@ -82,8 +93,10 @@ public final class Petting {
 	 */
 	private static Mob nearestLookedAt(ServerPlayer player, ServerLevel level) {
 		AABB reach = player.getBoundingBox().inflate(REACH);
+		// Anybody's: a tamed animal takes a fuss from whoever offers one, and a friend's dog
+		// nosing up to you is exactly the animal you would reach for.
 		List<Mob> mine = level.getEntitiesOfClass(Mob.class, reach,
-			mob -> Companions.isOwnedBy(mob, player) && mob.isAlive());
+			mob -> Companions.hasOwner(mob) && mob.isAlive());
 
 		if (mine.isEmpty()) return null;
 

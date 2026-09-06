@@ -43,7 +43,10 @@ public final class TameInteraction {
 
 		ItemStack held = player.getItemInHand(hand);
 
-		if (held.isEmpty()) return toggleSitting(player, mob);
+		// An empty hand on your own companion: crouched, it is the one order they all answer -
+		// wait, or come along; standing, it is a hand laid on them, which is the petting. The
+		// crouch is what marks a touch as an order.
+		if (held.isEmpty()) return player.isShiftKeyDown() ? toggleSitting(player, mob) : pet(player, mob);
 
 		// Barding first: a companion already wearing one tier should take another rather than
 		// having the click fall through to whatever else the item might mean.
@@ -53,6 +56,15 @@ public final class TameInteraction {
 		if (mob instanceof TamableAnimal) return InteractionResult.PASS;
 
 		return tryTame(serverLevel, player, mob, held);
+	}
+
+	/** Anyone may pet a tamed companion. Whose it is decides who it obeys, not who it lets near. */
+	private static InteractionResult pet(Player player, Mob mob) {
+		if (!Companions.hasOwner(mob)) return InteractionResult.PASS;
+		if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer && Petting.pet(serverPlayer, mob)) {
+			return InteractionResult.SUCCESS;
+		}
+		return InteractionResult.PASS;
 	}
 
 	private static InteractionResult toggleSitting(Player player, Mob mob) {

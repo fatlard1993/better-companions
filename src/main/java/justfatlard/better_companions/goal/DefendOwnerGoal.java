@@ -1,6 +1,7 @@
 package justfatlard.better_companions.goal;
 
 import justfatlard.better_companions.Companions;
+import justfatlard.better_companions.Fed;
 import justfatlard.better_companions.Friends;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -42,6 +43,12 @@ public class DefendOwnerGoal extends TargetGoal {
 		quarry = owner.getLastHurtByMobTimestamp() >= owner.getLastHurtMobTimestamp() ? attacker : victim;
 		if (quarry == null || quarry == companion) return false;
 		if (Friends.isFriendly(quarry, owner)) return false;
+		// A cow the owner is hitting is a farm, not a fight, if they fed it lately - or if they
+		// have said the pack stays out of it with animals altogether.
+		if (Companions.isPassive(quarry) && (Companions.sparesPassive(owner)
+				|| Fed.recently(owner, quarry, companion.level().getGameTime()))) {
+			return false;
+		}
 
 		int stamp = Math.max(owner.getLastHurtByMobTimestamp(), owner.getLastHurtMobTimestamp());
 		if (stamp == lastOwnerHurtStamp) return false;

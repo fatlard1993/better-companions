@@ -37,9 +37,12 @@ here too and everything below applies to them; they simply arrive already tamed.
 
 ## Living with one
 
-- **Empty hand** tells a companion to wait, or to come along again. The same gesture a wolf has
-  always answered to. It is specifically an *empty* hand, so a cow still takes a bucket, a sheep
-  still takes shears and a mooshroom still takes a bowl.
+- **Sneak and click with an empty hand** tells a companion to wait, or to come along again: one
+  order for every animal you have fed into your company, a wolf included. It is specifically an
+  *empty* hand and a crouch, so a cow still takes a bucket, a sheep still takes shears, a
+  mooshroom still takes a bowl.
+- **A plain click with an empty hand** is a hand on them: the petting below, without reaching for
+  the key.
 - **They fight for you.** A companion takes your side whether you started it or not — but never
   against a friend.
 - **They settle in.** After a minute of waiting, a companion stops standing to attention: it
@@ -51,8 +54,8 @@ here too and everything below applies to them; they simply arrive already tamed.
 
 ## Petting
 
-**The pet keybind**, or `/companions pet`, makes a fuss of whichever of your companions you are
-looking at: it looks up at you, there are hearts, and it makes its own contented noise - the one
+**A plain empty-hand click**, the pet keybind, or `/companions pet`, makes a fuss of whichever
+tamed companion you are touching or looking at, yours or anyone's: it looks up at you, there are hearts, and it makes its own contented noise - the one
 the game already agrees that animal makes, rather than a table of one sound per species that
 somebody has to keep in step with every animal ever added.
 
@@ -78,12 +81,14 @@ to still be cross.
 
 ## Friends
 
-Nobody on the list is ever a target, whoever swung first.
+Nobody on your list is ever a target of your companions, whoever swung first. A stray hit from a
+friend in a shared fight is not a reason for your dogs to go for their throat.
 
 ```
 /companions friend add <player>
 /companions friend remove <name>
 /companions friend list
+/companions friend all        (operators: everyone online befriends everyone, both ways)
 ```
 
 **Vanilla teams count too.** Anyone on the owner's scoreboard team is a friend automatically —
@@ -91,8 +96,22 @@ reading the game's own answer rather than keeping a second list that means the s
 gets plugins and anything else that sets teams for free. So does anyone else's companion whose
 owner is a friend: turning on a friend's dog is the same unkindness as turning on the friend.
 
-The friends list is one list for the server, not one per player. A companion mauling the person who
-runs the place is everybody's problem.
+Each player names their own friends: who you trust around your animals is your call, and a friend
+of yours is no promise about anyone else's pack. The list is also on the Better Companions page of
+the mod menu, where a friend can be taken off again.
+
+These rules hold for the game's own tamed animals too. A wolf, a cat or a parrot keeps the game's own
+following, sitting and taking-your-side, but whatever it is about to go for is checked against your
+friends and against the animals you have fed or asked to be left alone. A friend is never a target,
+whoever swung first, the same promise the list makes everywhere else. A passive mob that strikes the
+wolf itself is still answered: that one is the wolf's own business.
+
+**Farm animals are not a fight.** The pack takes your side against whatever you swing at, and a cow
+you are butchering looks like a fight to them. Two things stop it. An animal you have fed in the last
+five minutes is left alone whatever you do to it: that is a farm, and the swing is your own business.
+And the Better Companions page of the mods menu has a switch, *Leave passive mobs alone*, that keeps
+your companions out of fights with animals, villagers and golems altogether. They still fight back
+when one of those goes for them.
 
 ## Companion armour
 
@@ -101,9 +120,24 @@ obvious things, and they only ever fitted one animal — so nothing new is added
 is simply allowed onto anything that walks with you. Right-click a companion holding it; take it
 back with `/companions unequip`.
 
+On a Pandorical client it is called what it is - Leather Companion Armor through Netherite Companion
+Armor - and drawn as a plate over a back rather than a horse, in each tier's own colours. Same
+item, same recipe, same protection; a vanilla client sees the horse.
+
+**And it is drawn on the animal wearing it.** The game only ever drew barding on a horse; here every
+companion wears its armour visibly, a plate over the back and sides with the tier's blanket on top,
+painted in the animal's own skin layout so it follows every joint the animal has. Nineteen shapes,
+six tiers each, and the cold and warm cows, pigs and chickens get their own since they are their
+own models. It is painted on the skin rather than standing off it, the way vanilla paints a wolf's
+collar, and it needs the Pandorical client to be seen. A sheep's wool covers it until the sheep is
+sheared. Babies wear it too, in armour of their own: a baby has been its own model since 26.3, with
+its own skin layout, so each one's plates are painted onto that layout by `generate_baby_armor.py`
+from the game's own baby models, the same plates and blanket at a baby's size.
+
 It sits in the same body slot the game uses for a horse's barding and a wolf's armour, so the
 protection comes from the item's own attributes rather than a number invented here, and it drops
-when the companion does.
+when the companion does. On a snow golem it is a coat as well: an armoured golem does not melt in
+the heat or the rain, so it can follow you out of the tundra and back.
 
 ## Poses
 
@@ -115,27 +149,25 @@ a goat without knowing which is which.
 
 ## What this does not do
 
-- **Armour is not drawn on most companions.** It equips and it protects, but only horses and wolves
-  have a model for wearing something. Drawing it on the other shapes is an art and rendering job,
-  not a server one.
-- **Horse armour is still called horse armour.** Renaming a vanilla item means overriding its
-  translation on every client, which is a different mechanism from the asset syncing this mod uses.
+- **Armour is painted, not modelled.** It sits on the skin rather than standing off the body, so it
+  reads as plate rather than as a saddle-shaped slab. Wolves could get vanilla's own raised wolf
+  armour model by adding a wolf layer to the horse armour equipment assets; that is one animal on a
+  second path, and has not been done.
 
 ## Pandorical
 
 Better Companions uses Pandorical for the whistle keybind, for the sit and lie-down animations on
-animals the game never drew a pose for, and for the riding tweaks (two riders, free look).
+animals the game never drew a pose for, for the riding tweaks (two riders, free look), to give the
+armour its name and its icon, and to draw it on the animal wearing it.
 
 **The Pandorical mod must be installed client-side** for those. Without it a companion still
 follows, waits and fights, but the whistle has no key, an animal without a vanilla pose stands
 still instead of settling, and the riding tweaks are off. Block Tip, if installed, names a
 companion and its owner when you look at it.
 
-## Installation
+## Development
 
-Install server-side alongside its declared dependencies (see `fabric.mod.json`); connecting clients
-need only Pandorical. Version targets live in `gradle.properties` (Minecraft, loader, Fabric API) and
-`fabric.mod.json` (Java).
+Installing is in [DEVELOPMENT.md](DEVELOPMENT.md).
 
 ## License
 

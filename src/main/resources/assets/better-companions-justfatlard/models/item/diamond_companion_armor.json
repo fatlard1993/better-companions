@@ -1,0 +1,6 @@
+{
+   "parent": "minecraft:item/generated",
+   "textures": {
+      "layer0": "better-companions-justfatlard:item/diamond_companion_armor"
+   }
+}
