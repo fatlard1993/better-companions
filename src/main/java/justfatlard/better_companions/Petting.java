@@ -19,8 +19,8 @@ import net.minecraft.world.phys.Vec3;
  * <p>Does nothing except say so, which is the point: a companion already follows, waits and fights,
  * and none of that ever gives you a reason to touch it. This is the reason.
  *
- * <p>Picks whichever of your companions you are looking at, so a pen full of them does not need a
- * gesture per animal. Looking at nothing in particular, the nearest one within arm's reach will do
+ * <p>Picks whichever animal you are looking at, companion or not, so a pen full of them does not
+ * need a gesture per animal. Looking at nothing in particular, the nearest one within arm's reach will do
  * - being in a crowd of your own animals and pressing the button should not require aim.
  */
 public final class Petting {
@@ -36,6 +36,22 @@ public final class Petting {
 	private static final long COOLDOWN_MS = 700;
 
 	private static final String ANIMATION = Main.MOD_ID + ":pet";
+
+	/**
+	 * The same fuss, over the pose the mod is holding an animal in. Pandorical plays one animation
+	 * on an animal at a time, so the plain one would stand a sitting companion up; these are the
+	 * pose held, with the fuss on top, and they end still in it.
+	 */
+	private static final String ANIMATION_SITTING = Main.MOD_ID + ":pet_sitting";
+	private static final String ANIMATION_RESTING = Main.MOD_ID + ":pet_resting";
+
+	/** Any animal takes a fuss, whoever's it is or whether it is anybody's. */
+	public static boolean isPettable(Mob mob) {
+		return mob instanceof net.minecraft.world.entity.animal.Animal
+			|| mob instanceof net.minecraft.world.entity.animal.fish.WaterAnimal
+			|| mob instanceof net.minecraft.world.entity.animal.AgeableWaterCreature
+			|| Companions.hasOwner(mob);
+	}
 
 	private static final Map<UUID, Long> lastPet = new ConcurrentHashMap<>();
 
@@ -68,9 +84,18 @@ public final class Petting {
 		return true;
 	}
 
-	/** Hearts, a pleased noise, and a moment of looking up at you. */
+	/** The petting hand, on the player: seen by everyone else, and by the player from behind. */
+	private static final String STROKE = Main.MOD_ID + ":pet_stroke";
+
+	/** Hearts, a pleased noise, a moment of looking up at you, and your hand on it. */
 	private static void fussOver(ServerLevel level, ServerPlayer player, Mob companion) {
 		PandoricalApiBridge.playPetAnimation(companion);
+
+		// The swing is the one arm movement a first-person view shows, so the player sees their own
+		// hand go out; the stroke is the rest of it, for anyone watching.
+		player.swing(net.minecraft.world.InteractionHand.MAIN_HAND,
+			net.minecraft.world.item.component.SwingAnimation.DEFAULT, true);
+		justfatlard.pandorical.api.PandoricalApi.animations().play(player, STROKE, false);
 
 		companion.getLookControl().setLookAt(player, 30F, 30F);
 
@@ -93,10 +118,10 @@ public final class Petting {
 	 */
 	private static Mob nearestLookedAt(ServerPlayer player, ServerLevel level) {
 		AABB reach = player.getBoundingBox().inflate(REACH);
-		// Anybody's: a tamed animal takes a fuss from whoever offers one, and a friend's dog
-		// nosing up to you is exactly the animal you would reach for.
+		// Anybody's, or nobody's: a friend's dog nosing up to you is exactly the animal you would
+		// reach for, and so is the sheep in the field.
 		List<Mob> mine = level.getEntitiesOfClass(Mob.class, reach,
-			mob -> Companions.hasOwner(mob) && mob.isAlive());
+			mob -> isPettable(mob) && mob.isAlive());
 
 		if (mine.isEmpty()) return null;
 
@@ -139,7 +164,15 @@ public final class Petting {
 		private PandoricalApiBridge() {}
 
 		static void playPetAnimation(Mob companion) {
-			justfatlard.pandorical.api.PandoricalApi.animations().play(companion, ANIMATION, false);
+			String animation = ANIMATION;
+			if (CompanionPoses.posedByMod(companion)) {
+				animation = switch (CompanionPoses.current(companion)) {
+					case SITTING -> ANIMATION_SITTING;
+					case RESTING -> ANIMATION_RESTING;
+					case STANDING -> ANIMATION;
+				};
+			}
+			justfatlard.pandorical.api.PandoricalApi.animations().play(companion, animation, false);
 		}
 	}
 }

@@ -35,6 +35,31 @@ dependencies {
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	implementation(project(':pandorical'))
+	// Optional: village-quests integration, compile-only and never bundled. Resolved by the
+	// version village-quests declares rather than one written down here, because Gradle never
+	// clears build/libs: a pinned name keeps compiling green against a jar an old build left
+	// behind, and says nothing when it does.
+	def villageQuestsProperties = file("../village-quests/gradle.properties")
+	if (villageQuestsProperties.exists()) {
+		def villageQuestsVersion = new Properties().with {
+			villageQuestsProperties.withInputStream { load(it) }
+			getProperty("mod_version")
+		}
+		def villageQuestsJar = file("../village-quests/build/libs/village-quests-${villageQuestsVersion}.jar")
+		if (villageQuestsJar.exists()) compileOnly files(villageQuestsJar)
+	}
+}
+
+// src/gametest: runClientGameTest joins a world and drives companions through the server's own
+// paths. It opens a window: run it under xvfb-run.
+fabricApi {
+	configureTests {
+		createSourceSet = true
+		modId = "better-companions-gametest"
+		enableGameTests = false
+		enableClientGameTests = true
+		eula = true
+	}
 }
 
 // Fabric tests these predicates against the loader's *normalized* game version,

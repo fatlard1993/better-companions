@@ -23,7 +23,8 @@ public final class Grudges {
 	/** Two hits inside this window are a decision; further apart they are two accidents. */
 	private static final long FORGIVENESS_WINDOW_TICKS = 20L * 8L;
 
-	private record Strike(UUID striker, long at) {}
+	/** @param angry whether this blow was the second in the window, which is what is held against them */
+	private record Strike(UUID striker, long at, boolean angry) {}
 
 	private static final Map<UUID, Strike> LAST_STRIKE = new HashMap<>();
 
@@ -40,7 +41,7 @@ public final class Grudges {
 			&& previous.striker().equals(striker.getUUID())
 			&& gameTime - previous.at() <= FORGIVENESS_WINDOW_TICKS;
 
-		LAST_STRIKE.put(id, new Strike(striker.getUUID(), gameTime));
+		LAST_STRIKE.put(id, new Strike(striker.getUUID(), gameTime, repeat));
 		return repeat;
 	}
 
@@ -49,6 +50,7 @@ public final class Grudges {
 		Strike strike = LAST_STRIKE.get(companion.getUUID());
 
 		return strike != null
+			&& strike.angry()
 			&& strike.striker().equals(player.getUUID())
 			&& gameTime - strike.at() <= FORGIVENESS_WINDOW_TICKS;
 	}

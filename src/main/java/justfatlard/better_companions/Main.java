@@ -37,12 +37,16 @@ public class Main implements ModInitializer {
 			if (entity instanceof Mob mob && CompanionGoals.shouldInstall(mob)) {
 				CompanionGoals.install(mob);
 			}
+			if (entity instanceof net.minecraft.world.entity.TamableAnimal tamable) {
+				CompanionGoals.installSettling(tamable);
+			}
 			if (entity instanceof Mob mob && Companions.hasOwner(mob)) {
 				CompanionArmor.show(mob);
 			}
 		});
 
 		UseEntityCallback.EVENT.register(TameInteraction::onUseEntity);
+		PortalFollow.register();
 
 		CompanionArmor.dress();
 
@@ -91,7 +95,7 @@ public class Main implements ModInitializer {
 		// for the player to bind them in the controls screen.
 		PandoricalApi.keybinds().register(MOD_ID + ":whistle", 25, "Whistle for Companions",
 			Whistle::blow);
-		PandoricalApi.keybinds().register(MOD_ID + ":pet", 19, "Pet Companion",
+		PandoricalApi.keybinds().register(MOD_ID + ":pet", 19, "Pet Animal",
 			Petting::pet);
 
 		// The petting cooldown is keyed by player and nothing else ever removes an entry.
@@ -104,5 +108,11 @@ public class Main implements ModInitializer {
 
 		LOGGER.info("Better Companions loaded - {} animals will keep you company",
 			CompanionSpecies.offerings().size());
+
+		// Guarded, and the guard is why the call sits behind its own class: naming a
+		// village-quests type here would load it whether or not that mod is installed.
+		if (net.fabricmc.loader.api.FabricLoader.getInstance().isModLoaded("village-quests-justfatlard")) {
+			justfatlard.better_companions.integration.CompanionRemarks.register();
+		}
 	}
 }

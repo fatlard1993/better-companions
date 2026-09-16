@@ -42,12 +42,17 @@ here too and everything below applies to them; they simply arrive already tamed.
   *empty* hand and a crouch, so a cow still takes a bucket, a sheep still takes shears, a
   mooshroom still takes a bowl.
 - **A plain click with an empty hand** is a hand on them: the petting below, without reaching for
-  the key.
+  the key. Not on a mount - a horse, a nautilus, anything saddled - where that click is how you
+  climb on; pet a mount with the key.
 - **They fight for you.** A companion takes your side whether you started it or not — but never
   against a friend.
-- **They settle in.** After a minute of waiting, a companion stops standing to attention: it
+- **They settle in.** After five minutes of waiting, a companion stops standing to attention: it
   potters about within a few blocks of where you left it and lies down for a while at a time. It is
-  still where you left it when you come back.
+  still where you left it when you come back. A dog or a cat told to sit does the same, getting up
+  now and then to sit down somewhere else nearby; it is still told to sit, so it neither follows
+  nor fights.
+- **They come through portals with you.** Companions following you, within sixteen blocks of where
+  you step through, come out beside you on the far side. One told to wait stays where it is.
 - **`/companions whistle`**, or the keybind (V by default, rebindable), calls everyone in. Anything
   further than shouting distance is put down nearby and walks the rest, so they arrive walking
   rather than appearing at your elbow. A whistle cancels a stay order — the newer instruction wins.
@@ -55,7 +60,10 @@ here too and everything below applies to them; they simply arrive already tamed.
 ## Petting
 
 **A plain empty-hand click**, the pet keybind, or `/companions pet`, makes a fuss of whichever
-tamed companion you are touching or looking at, yours or anyone's: it looks up at you, there are hearts, and it makes its own contented noise - the one
+animal you are touching or looking at, yours, anyone's or nobody's (on a mount the click rides it,
+so a mount is petted with the key or the command, and on an animal on your lead it lets it off):
+your hand swings out and strokes it twice, it tips its head, gives a little hop and wags whatever
+tail it has, there are hearts, and it makes its own contented noise - the one
 the game already agrees that animal makes, rather than a table of one sound per species that
 somebody has to keep in step with every animal ever added.
 
@@ -63,12 +71,27 @@ Looking straight at one always wins. Looking at nothing in particular, the neare
 reach will do, because being in the middle of your own herd and pressing the button should not
 require aim.
 
+An animal the mod has sitting or lying down stays sitting or lying through it.
+
 It does nothing else, and that is the point. A companion already follows, waits and fights, and
 none of that ever gives you a reason to touch it.
 
 The keybind lives in the same pool the whistle does, so it appears in your normal controls screen
 under "Pandorical" and rebinds like any other key. A pool slot can arrive unbound, which is why
 there is a command for it too.
+
+## What the village makes of it
+
+With [village-quests](../village-quests) installed, villagers notice. The whole
+remark rests on the one fact this mod created that nothing else will comment on:
+a cow that follows a person. The shepherd has spent a life getting animals to do
+that on purpose and failing. The farmer has spent two seasons on a fence you
+walked a pig straight past. The butcher has had a thousand animals through the
+shop and not one of them ever chose somebody.
+
+Dogs are exempt, because wolves, cats and parrots were tameable before this mod
+and nobody would look twice. The lines name whatever is actually at your heel,
+so it is a cow or a polar bear or a bee and never "an animal".
 
 ## Forgiveness
 
@@ -110,8 +133,8 @@ wolf itself is still answered: that one is the wolf's own business.
 you are butchering looks like a fight to them. Two things stop it. An animal you have fed in the last
 five minutes is left alone whatever you do to it: that is a farm, and the swing is your own business.
 And the Better Companions page of the mods menu has a switch, *Leave passive mobs alone*, that keeps
-your companions out of fights with animals, villagers and golems altogether. They still fight back
-when one of those goes for them.
+your companions out of fights with animals, villagers and golems altogether. It is off by default
+and each player's own. They still fight back when one of those goes for them.
 
 ## Companion armour
 
@@ -126,9 +149,9 @@ item, same recipe, same protection; a vanilla client sees the horse.
 
 **And it is drawn on the animal wearing it.** The game only ever drew barding on a horse; here every
 companion wears its armour visibly, a plate over the back and sides with the tier's blanket on top,
-painted in the animal's own skin layout so it follows every joint the animal has. Nineteen shapes,
-six tiers each, and the cold and warm cows, pigs and chickens get their own since they are their
-own models. It is painted on the skin rather than standing off it, the way vanilla paints a wolf's
+painted in the animal's own skin layout so it follows every joint the animal has. Twenty-one
+shapes, six tiers each, and the cold and warm cows and the cold pigs and chickens get their own
+since they are their own models. It is painted on the skin rather than standing off it, the way vanilla paints a wolf's
 collar, and it needs the Pandorical client to be seen. A sheep's wool covers it until the sheep is
 sheared. Babies wear it too, in armour of their own: a baby has been its own model since 26.3, with
 its own skin layout, so each one's plates are painted onto that layout by `generate_baby_armor.py`
@@ -156,14 +179,15 @@ a goat without knowing which is which.
 
 ## Pandorical
 
-Better Companions uses Pandorical for the whistle keybind, for the sit and lie-down animations on
+Pandorical is required on the server. Better Companions uses it for the whistle and pet keybinds, for the sit and lie-down animations on
 animals the game never drew a pose for, for the riding tweaks (two riders, free look), to give the
 armour its name and its icon, and to draw it on the animal wearing it.
 
 **The Pandorical mod must be installed client-side** for those. Without it a companion still
 follows, waits and fights, but the whistle has no key, an animal without a vanilla pose stands
-still instead of settling, and the riding tweaks are off. Block Tip, if installed, names a
-companion and its owner when you look at it.
+still instead of settling, and the riding tweaks are off. Block Tip, if installed, says of a
+companion you look at whether it is yours and whether it is waiting, and of a wild one what would
+befriend it.
 
 ## Development
 

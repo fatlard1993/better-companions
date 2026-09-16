@@ -78,6 +78,15 @@ public final class CompanionGoals {
 		targets.addGoal(2, new RetaliateGoal(mob));
 	}
 
+	/**
+	 * Settling in, for the game's own tamed animals, which carry none of the goals above. Given to
+	 * every one of them, tamed yet or not: the goal itself waits for a tame animal told to sit.
+	 * Ahead of the game's own sit-when-ordered, which it takes over from once the animal has settled.
+	 */
+	public static void installSettling(TamableAnimal mob) {
+		mob.getGoalSelector().addGoal(STAY_PRIORITY, new justfatlard.better_companions.goal.TamedSettleGoal(mob));
+	}
+
 	/** Whether this animal should be carrying companion goals right now. */
 	public static boolean shouldInstall(Mob mob) {
 		// The game's own tamed animals already have following, sitting and taking their owner's

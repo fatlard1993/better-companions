@@ -11,6 +11,6 @@
  "key.better-companions-justfatlard.whistle": "Whistle for Companions",
  "command.better-companions-justfatlard.unequip": "Took the armour off %s",
  "command.better-companions-justfatlard.unequip.none": "No armoured companion nearby",
- "message.better-companions-justfatlard.pet.none": "Nothing of yours within reach",
- "key.better-companions-justfatlard.pet": "Pet Companion"
+ "message.better-companions-justfatlard.pet.none": "No animal within reach",
+ "key.better-companions-justfatlard.pet": "Pet Animal"
 }

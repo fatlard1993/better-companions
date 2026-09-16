@@ -18,10 +18,9 @@ import net.minecraft.world.entity.animal.panda.Panda;
  * on top. They have only the one pose between sitting and resting, which is fine - the distinction
  * matters more to the code than to the animal.
  *
- * <p>Everything else gets one of the mod's own animations, played through Pandorical. They name the
- * parts vanilla's four-legged models all share, so the same two poses serve a cow, a pig, a sheep
- * and a goat without knowing which is which, and quietly do nothing to the parts of an animal
- * shaped differently.
+ * <p>Everything else gets one of the mod's own animations, played through Pandorical. They move
+ * the body and head, the parts every model has by those names, so the same two poses serve a cow,
+ * a pig, a frog and a goat without knowing which is which.
  */
 public final class CompanionPoses {
 	private CompanionPoses() {}
@@ -39,21 +38,35 @@ public final class CompanionPoses {
 	/**
 	 * The poses for animals the game has no sitting pose of its own for.
 	 *
-	 * <p>Each names the bones of more than one body plan - a quadruped's {@code left_hind_leg} and
-	 * a frog's or a chicken's {@code left_leg} - because an animation quietly skips a bone the
-	 * model does not have. That silence is the trap: the first version of this named only the
-	 * quadruped bones, so a frog was sent an animation that moved nothing but its body by two
-	 * pixels, and sitting looked like a feature that did not work rather than one aimed at the
-	 * wrong parts. Naming both costs nothing on an animal that has only one of them.
-	 *
-	 * <p>So an animal added to the roster with legs spelled some third way needs its spelling added
-	 * here, and the way that shows up is that it stands there when told to wait.
+	 * <p>They lower the body and leave the legs alone. An offset is in the model's own pixels, the
+	 * same for every animal it plays on, and legs are not the same length on any two of them: a
+	 * fold that sets a cow on the ground leaves a pig underground, and one sized for a pig leaves
+	 * a cow hanging in the air above its folded legs.
 	 */
 	private static final String SIT = Main.MOD_ID + ":sit";
 	private static final String LIE_DOWN = Main.MOD_ID + ":lie_down";
 
+	/** The pose last set on each animal the mod poses itself, for anything played over it. */
+	private static final java.util.Map<java.util.UUID, Pose> HELD = new java.util.concurrent.ConcurrentHashMap<>();
+
+	/** How this animal is holding itself, as far as the mod set it; standing if it never did. */
+	public static Pose current(Mob mob) {
+		return HELD.getOrDefault(mob.getUUID(), Pose.STANDING);
+	}
+
+	/** Whether the mod draws this animal's poses itself, rather than the game's own pose for it. */
+	public static boolean posedByMod(Mob mob) {
+		return !(mob instanceof Fox) && !(mob instanceof Panda) && !(mob instanceof TamableAnimal);
+	}
+
+	public static void forget(java.util.UUID mob) {
+		HELD.remove(mob);
+	}
+
 	public static void set(Mob mob, Pose pose) {
 		boolean settled = pose != Pose.STANDING;
+		if (pose == Pose.STANDING) HELD.remove(mob.getUUID());
+		else HELD.put(mob.getUUID(), pose);
 
 		// The game's own animals have one pose for both, so both ask for it.
 		if (mob instanceof Fox fox) {

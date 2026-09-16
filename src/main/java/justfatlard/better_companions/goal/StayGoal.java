@@ -21,7 +21,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 public class StayGoal extends Goal {
 
 	/** How long a companion holds perfectly still before it is allowed to settle in. */
-	public static final int SETTLE_TICKS = 20 * 60;
+	public static final int SETTLE_TICKS = 20 * 60 * 5;
 
 	private final Mob mob;
 

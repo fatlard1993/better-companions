@@ -43,9 +43,15 @@ public final class TameInteraction {
 
 		ItemStack held = player.getItemInHand(hand);
 
-		// An empty hand on your own companion: crouched, it is the one order they all answer -
-		// wait, or come along; standing, it is a hand laid on them, which is the petting. The
-		// crouch is what marks a touch as an order.
+		// An empty hand: crouched, on your own companion, it is the one order they all answer -
+		// wait, or come along; standing, on any animal, it is a hand laid on them, which is the
+		// petting. The crouch is what marks a touch as an order.
+		// Except that a mount is ridden by the empty-handed click, as vanilla has it: petting took
+		// that click, so nobody could climb onto their own nautilus or horse bare-handed. Petting
+		// a mount is the pet key's.
+		if (held.isEmpty() && !player.isShiftKeyDown() && isMount(mob)) return InteractionResult.PASS;
+		// And an empty hand on an animal on your own lead is how you let it off.
+		if (held.isEmpty() && mob.isLeashed() && mob.getLeashHolder() == player) return InteractionResult.PASS;
 		if (held.isEmpty()) return player.isShiftKeyDown() ? toggleSitting(player, mob) : pet(player, mob);
 
 		// Barding first: a companion already wearing one tier should take another rather than
@@ -58,9 +64,20 @@ public final class TameInteraction {
 		return tryTame(serverLevel, player, mob, held);
 	}
 
-	/** Anyone may pet a tamed companion. Whose it is decides who it obeys, not who it lets near. */
+	/**
+	 * Something ridden by clicking on it: a horse of any kind, a nautilus, a happy ghast, anything
+	 * wearing a saddle.
+	 */
+	private static boolean isMount(Mob mob) {
+		return mob instanceof net.minecraft.world.entity.animal.equine.AbstractHorse
+			|| mob instanceof net.minecraft.world.entity.animal.nautilus.AbstractNautilus
+			|| mob instanceof net.minecraft.world.entity.animal.happyghast.HappyGhast
+			|| !mob.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.SADDLE).isEmpty();
+	}
+
+	/** Anyone may pet any animal. Whose it is decides who it obeys, not who it lets near. */
 	private static InteractionResult pet(Player player, Mob mob) {
-		if (!Companions.hasOwner(mob)) return InteractionResult.PASS;
+		if (!Petting.isPettable(mob)) return InteractionResult.PASS;
 		if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer && Petting.pet(serverPlayer, mob)) {
 			return InteractionResult.SUCCESS;
 		}
