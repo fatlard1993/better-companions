@@ -1,0 +1,18 @@
+{
+  "parent": "minecraft:husbandry/tame_an_animal",
+  "display": {
+    "icon": {
+      "id": "minecraft:bone"
+    },
+    "title": "Warband",
+    "description": "Have eight befriended animals at your back at once",
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "eight_at_once": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

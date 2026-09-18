@@ -87,9 +87,10 @@ public final class Companions {
 	public static void tame(Mob mob, Player player) {
 		if (mob instanceof TamableAnimal tamable) {
 			tamable.tame(player);
-			return;
+		} else {
+			setState(mob, stateOf(mob).withOwner(player.getUUID()));
 		}
-		setState(mob, stateOf(mob).withOwner(player.getUUID()));
+		Awards.befriended(player instanceof net.minecraft.server.level.ServerPlayer owner ? owner : null);
 	}
 
 	/** A mob that is not out to get anyone: an animal, a villager, a golem. Never a monster or a person. */
