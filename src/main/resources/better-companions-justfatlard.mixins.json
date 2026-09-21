@@ -5,6 +5,7 @@
 	"mixins": [
 		"MobAccessor",
 		"TamedTargetMixin",
+		"TamedRosterMixin",
 		"SnowGolemArmorMixin"
 	],
 	"injectors": {

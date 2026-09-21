@@ -1,0 +1,15 @@
+{
+  "overview": [
+    "Sixteen more animals can be befriended, and will follow, wait and fight alongside you the way only a wolf could before."
+  ],
+  "versions": {
+    "1.1.0": [
+      "A whistle now reaches every companion you have, wherever it is: asleep in a chunk nobody is standing in, or waiting in another dimension. Ones already at your heel stay where they stand, and anything on a lead or being ridden is left alone.",
+      "Every companion on one page, with how far off each one is and a button to let it go, plus /companions release for the one you are standing next to. Feeding a hurt companion the food that won it over mends it, and there is an advancement for the day eight of them are still behind you."
+    ],
+    "1.0.0": [
+      "Crouch and offer an animal the thing it already likes, berries to a fox, bamboo to a panda, wheat to a cow, and it is yours: it follows, waits where you put it, wears armour and comes through a portal at your heels.",
+      "Pet any animal and watch it happen, and a companion told to stay gets up after a while and potters about the spot rather than standing on one block."
+    ]
+  }
+}

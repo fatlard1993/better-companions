@@ -12,5 +12,7 @@
  "command.better-companions-justfatlard.unequip": "Took the armour off %s",
  "command.better-companions-justfatlard.unequip.none": "No armoured companion nearby",
  "message.better-companions-justfatlard.pet.none": "No animal within reach",
- "key.better-companions-justfatlard.pet": "Pet Animal"
+ "key.better-companions-justfatlard.pet": "Pet Animal",
+ "command.better-companions-justfatlard.release": "%s is no longer your companion",
+ "command.better-companions-justfatlard.release.none": "No companion of yours within reach"
 }

@@ -12,7 +12,8 @@ import net.minecraft.world.item.Item;
  *
  * <p>Sixteen animals with sixteen different offerings is exactly the sort of thing nobody should
  * have to memorise or alt-tab for, and block-tip is already the place this server answers "what do
- * I do with this". So a wild one says what would win it over, and a tamed one says whose it is.
+ * I do with this". So a wild one says what would win it over, a tamed one says whose it is, and a
+ * hurt one names the same item again, which is when it is least likely to be remembered.
  *
  * <p>Compiled against block-tip's API and guarded at the call site by a mod-loaded check, so a
  * server without it never loads this class.
@@ -27,20 +28,29 @@ public final class CompanionTips {
 	private static String describe(Entity entity, net.minecraft.server.level.ServerPlayer player) {
 		if (!(entity instanceof Mob mob)) return null;
 
+		Item offering = CompanionSpecies.offeringFor(mob.getType());
+
 		if (Companions.hasOwner(mob)) {
-			if (Companions.isOwnedBy(mob, player)) {
-				return Companions.isSitting(mob) ? "Waiting for you" : "Following you";
+			String whose = Companions.isOwnedBy(mob, player)
+				? (Companions.isSitting(mob) ? "Waiting for you" : "Following you")
+				: "Someone else's companion";
+
+			// The offering mends a hurt companion, and a hurt one is exactly when nobody remembers
+			// which item that was.
+			if (offering != null && mob.getHealth() < mob.getMaxHealth()) {
+				return whose + ", hurt - " + name(offering) + " mends it";
 			}
-			return "Someone else's companion";
+			return whose;
 		}
 
-		Item offering = CompanionSpecies.offeringFor(mob.getType());
 		if (offering == null) return null;
 
 		// Naming the crouch, because the item alone is also what you feed it with: without the
 		// gesture the tip would read as an instruction to do the thing that breeds it instead.
-		return "Sneak + "
-			+ new net.minecraft.world.item.ItemStack(offering).getHoverName().getString()
-			+ " to befriend";
+		return "Sneak + " + name(offering) + " to befriend";
+	}
+
+	private static String name(Item offering) {
+		return new net.minecraft.world.item.ItemStack(offering).getHoverName().getString();
 	}
 }

@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import justfatlard.pandorical.api.ActionMenuApi;
 import justfatlard.pandorical.api.PandoricalApi;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Mob;
@@ -42,11 +43,20 @@ public class Main implements ModInitializer {
 			}
 			if (entity instanceof Mob mob && Companions.hasOwner(mob)) {
 				CompanionArmor.show(mob);
+				Roster.note(mob);
 			}
+		});
+
+		// Where each companion is when the server stops thinking about it, so a whistle knows which
+		// chunk to wake. Everything else the mod does needs the animal in hand; this is the one
+		// question asked about animals that are not.
+		ServerEntityEvents.ENTITY_UNLOAD.register((entity, level) -> {
+			if (entity instanceof Mob mob && Companions.hasOwner(mob)) Roster.noteOrForget(mob);
 		});
 
 		UseEntityCallback.EVENT.register(TameInteraction::onUseEntity);
 		PortalFollow.register();
+		Whistle.register();
 
 		CompanionArmor.dress();
 
@@ -71,6 +81,13 @@ public class Main implements ModInitializer {
 			.toggle("spare_passive", "Leave passive mobs alone", false)
 			.describe("Your companions never join a fight against an animal or villager; they still defend themselves");
 		Fed.init();
+
+		// Every companion on one page, because twenty animals across three dimensions is a thing
+		// nobody can see any other way. Read from the roster rather than from the world, which is
+		// the only list that knows about the ones that are asleep.
+		PandoricalApi.settings().group(MOD_ID, "Better Companions")
+			.list("companions", "Companions", CompanionMenu::of, CompanionMenu::dismiss)
+			.describe("Everything that follows you, and where it is; the button lets one go for good");
 
 		PandoricalApi.settings().group(MOD_ID, "Better Companions")
 			.list("friends", "Friends",
@@ -97,6 +114,24 @@ public class Main implements ModInitializer {
 			Whistle::blow);
 		PandoricalApi.keybinds().register(MOD_ID + ":pet", 19, "Pet Animal",
 			Petting::pet);
+		// Whistling is worth a button: it is occasional, and easy to forget there is a key for.
+		// Petting is not - it is a right-click on the animal, and a menu would be the slow way.
+		PandoricalApi.actionMenus().promoteKeybind(MOD_ID + ":whistle", "minecraft:goat_horn");
+
+		// Releasing is a command rather than a key, so it is offered as a button of its own. A key
+		// on purpose it is not: this is the one thing here that cannot be undone, and a menu you
+		// have to open is the right amount of deliberate for it. A lead for the icon, since the
+		// button's whole subject is the tie between a person and an animal.
+		PandoricalApi.actionMenus().suggestButton(ActionMenuApi.Button.runs(
+			"minecraft:lead", "Release", "companions release"));
+
+		PandoricalApi.commandHelp().describe("/companions whistle", "Call every companion of yours to you.");
+		PandoricalApi.commandHelp().describe("/companions pet", "Make a fuss of the nearest animal.");
+		PandoricalApi.commandHelp().describe("/companions unequip", "Take the armour off the nearest companion.");
+		PandoricalApi.commandHelp().describe("/companions release",
+			"Let the nearest companion go; the mods menu lists the rest.");
+		PandoricalApi.commandHelp().describe("/companions friend",
+			"Who your companions will not fight back against.");
 
 		// The petting cooldown is keyed by player and nothing else ever removes an entry.
 		net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents.DISCONNECT.register(

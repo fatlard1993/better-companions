@@ -1,6 +1,8 @@
 package justfatlard.better_companions;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -8,6 +10,7 @@ import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 /**
@@ -25,7 +28,13 @@ import net.minecraft.world.item.Items;
 public final class CompanionSpecies {
 	private CompanionSpecies() {}
 
-	private static final Map<EntityType<?>, Item> OFFERINGS = new LinkedHashMap<>();
+	/**
+	 * More than one item per animal, because another mod may know a second thing this animal
+	 * wants: beets-bears gives the bears honey and beetroot without taking their salmon away. The
+	 * first in the list is the one the tip names, so the one declared here stays the answer to
+	 * "what does this like" and the rest are extras that also work.
+	 */
+	private static final Map<EntityType<?>, List<Item>> OFFERINGS = new LinkedHashMap<>();
 
 	static {
 		// What the animal already likes, where the game says so.
@@ -50,16 +59,38 @@ public final class CompanionSpecies {
 	}
 
 	private static void offer(EntityType<?> type, Item item) {
-		OFFERINGS.put(type, item);
+		OFFERINGS.put(type, new ArrayList<>(List.of(item)));
 	}
 
-	/** The item this animal will befriend you for, or null if it is not one of ours. */
+	/**
+	 * Another mod adding something this animal will also come for, during onInitialize.
+	 *
+	 * <p>Added after whatever this mod declared, so the tip keeps naming the animal's own food and
+	 * the addition is a second way in rather than a replacement. An animal this mod does not tame
+	 * at all can be added outright this way.
+	 */
+	public static void alsoOffer(EntityType<?> type, Item... items) {
+		OFFERINGS.computeIfAbsent(type, key -> new ArrayList<>()).addAll(List.of(items));
+	}
+
+	/** The item this animal is best known for wanting, or null if it is not one of ours. */
 	public static Item offeringFor(EntityType<?> type) {
-		return OFFERINGS.get(type);
+		List<Item> items = OFFERINGS.get(type);
+		return items == null || items.isEmpty() ? null : items.getFirst();
+	}
+
+	/** Whether this is something you could hold out to this animal. */
+	public static boolean accepts(EntityType<?> type, ItemStack held) {
+		List<Item> items = OFFERINGS.get(type);
+		if (items == null) return false;
+		for (Item item : items) {
+			if (held.is(item)) return true;
+		}
+		return false;
 	}
 
 	/** Every animal this mod can tame, in the order they were declared. */
-	public static Map<EntityType<?>, Item> offerings() {
+	public static Map<EntityType<?>, List<Item>> offerings() {
 		return OFFERINGS;
 	}
 

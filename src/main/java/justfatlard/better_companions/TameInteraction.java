@@ -15,7 +15,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.core.particles.ParticleTypes;
 
 /**
- * Winning an animal over, and telling it to wait.
+ * Winning an animal over, telling it to wait, and patching it up.
  *
  * <p>Crouch and offer it the thing it likes and it decides to come with you. Then an empty hand
  * tells it to stay or to come along again - the same gesture a wolf has always answered to, so there
@@ -58,6 +58,11 @@ public final class TameInteraction {
 		// having the click fall through to whatever else the item might mean.
 		InteractionResult armored = CompanionArmor.equip(serverLevel, player, mob, held);
 		if (armored != InteractionResult.PASS) return armored;
+
+		// Then mending, for the same reason: a hurt companion offered the thing it likes should be
+		// mended by it rather than have the click mean whatever that item usually means.
+		InteractionResult mended = Healing.offer(serverLevel, player, mob, held);
+		if (mended != InteractionResult.PASS) return mended;
 
 		if (mob instanceof TamableAnimal) return InteractionResult.PASS;
 
@@ -110,8 +115,7 @@ public final class TameInteraction {
 		if (!player.isShiftKeyDown()) return InteractionResult.PASS;
 		if (Companions.hasOwner(mob)) return InteractionResult.PASS;
 
-		var offering = CompanionSpecies.offeringFor(mob.getType());
-		if (offering == null || !held.is(offering)) return InteractionResult.PASS;
+		if (!CompanionSpecies.accepts(mob.getType(), held)) return InteractionResult.PASS;
 
 		if (!player.isCreative()) held.shrink(1);
 

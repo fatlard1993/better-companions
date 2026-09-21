@@ -2,6 +2,7 @@ package justfatlard.better_companions.gametest;
 
 import justfatlard.better_companions.Companions;
 import justfatlard.better_companions.TameInteraction;
+import justfatlard.better_companions.Whistle;
 import justfatlard.better_companions.goal.StayGoal;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
@@ -30,8 +31,9 @@ import net.minecraft.world.phys.Vec3;
 import java.util.UUID;
 
 /**
- * Petting any animal, a dog that has waited long enough getting up to potter about its spot, and
- * a following dog coming through a portal while a waiting one stays.
+ * Petting any animal, a dog that has waited long enough getting up to potter about its spot, a
+ * following dog coming through a portal while a waiting one stays, and a whistle that reaches the
+ * one that stayed.
  */
 public final class CompanionBehaviour implements FabricClientGameTest {
 
@@ -119,6 +121,18 @@ public final class CompanionBehaviour implements FabricClientGameTest {
 				// The overworld may have unloaded behind the player, so the waiting dog is looked
 				// for where it must not be rather than where it should.
 				check(nether.getEntity(sitter) == null, "the waiting dog came through as well");
+			});
+
+			// And a whistle reaches the one left behind: another dimension, and a chunk nobody is
+			// standing in, which between them are every reason a whistle used to find nothing.
+			server.runOnServer(s -> Whistle.blow(connection.getServerPlayer()));
+			context.waitTicks(30);
+			server.runOnServer(s -> {
+				ServerPlayer player = connection.getServerPlayer();
+				Wolf called = (Wolf) s.getLevel(Level.NETHER).getEntity(sitter);
+				check(called != null, "a whistle did not reach the dog left in the overworld");
+				check(called.distanceTo(player) < 16, "the whistled dog arrived nowhere near the player");
+				check(!called.isOrderedToSit(), "the whistle did not cancel the stay order");
 			});
 		}
 	}

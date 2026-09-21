@@ -28,6 +28,12 @@ public class RetaliateGoal extends TargetGoal {
 
 	@Override
 	public boolean canUse() {
+		// Goals are built when an animal loads and torn down when it unloads, so a released one
+		// carries this until it next sleeps. Every other companion goal asks who the owner is and
+		// falls silent when there is nobody; this one did not, and a let-go cow went on fighting
+		// like a dog for the rest of the afternoon.
+		if (!Companions.hasOwner(companion)) return false;
+
 		LivingEntity attacker = companion.getLastHurtByMob();
 		if (attacker == null || attacker == companion) return false;
 

@@ -13,7 +13,8 @@ import net.minecraft.world.entity.player.Player;
 /**
  * Who belongs to whom, and whether they have been told to wait.
  *
- * <p>Every question here has two answers underneath: one for the animals the game already knows how
+ * <p>Binding and unbinding both live here, so the two halves of the same fact cannot drift apart.
+ * Every question here has two answers underneath: one for the animals the game already knows how
  * to tame, which keep their own owner and sitting flag, and one for the animals this mod tames,
  * which carry an attachment. Callers should never have to know which is which - a wolf and a cow
  * are both somebody's companion - so nothing outside this class asks.
@@ -89,8 +90,43 @@ public final class Companions {
 			tamable.tame(player);
 		} else {
 			setState(mob, stateOf(mob).withOwner(player.getUUID()));
+			Roster.note(mob);
 		}
 		Awards.befriended(player instanceof net.minecraft.server.level.ServerPlayer owner ? owner : null);
+	}
+
+	/**
+	 * Let an animal go: the end of being somebody's, and the third thing you can tell a companion
+	 * after follow and wait.
+	 *
+	 * <p>It keeps nothing. The owner goes, the stay order goes, the pose goes, and the line in the
+	 * roster goes, so a released animal is wild in every sense rather than one this mod still has
+	 * opinions about. A mod-tamed animal can simply be offered the same thing again; the game's own
+	 * three go back to wanting what the game asks for.
+	 *
+	 * <p>Armour comes back to the person letting it go, wherever they are standing. Barding walking
+	 * off into the world inside an animal nobody owns any more is a loss nobody chose, and the
+	 * gesture is a person taking their gear back rather than abandoning it.
+	 *
+	 * @return whether this was theirs to release
+	 */
+	public static boolean release(net.minecraft.server.level.ServerPlayer owner, Mob mob) {
+		if (!isOwnedBy(mob, owner)) return false;
+
+		CompanionArmor.unequip(owner, mob);
+
+		if (mob instanceof TamableAnimal tamable) {
+			tamable.setOrderedToSit(false);
+			tamable.setOwnerReference(null);
+			tamable.setTame(false, true);
+		} else {
+			mob.removeAttached(STATE);
+		}
+
+		CompanionPoses.set(mob, CompanionPoses.Pose.STANDING);
+		mob.setTarget(null);
+		Roster.forget(mob);
+		return true;
 	}
 
 	/** A mob that is not out to get anyone: an animal, a villager, a golem. Never a monster or a person. */

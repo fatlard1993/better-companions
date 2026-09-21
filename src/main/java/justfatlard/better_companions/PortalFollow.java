@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityLevelChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Mob;
@@ -58,24 +57,9 @@ public final class PortalFollow {
 				&& !mob.isPassenger() && !mob.isVehicle() && !mob.isLeashed());
 
 		for (Mob mob : party) {
-			Vec3 landing = landingFor(destination, player, mob);
+			Vec3 landing = Arrivals.beside(destination, player, mob, ARRIVAL_SPREAD);
 			mob.teleport(new TeleportTransition(destination, landing, Vec3.ZERO, mob.getYRot(), mob.getXRot(),
 				TeleportTransition.DO_NOTHING));
 		}
-	}
-
-	/** Beside the player where it fits, or where the player stands. */
-	private static Vec3 landingFor(ServerLevel level, ServerPlayer player, Mob mob) {
-		BlockPos base = player.blockPosition();
-		for (int attempt = 0; attempt < 10; attempt++) {
-			BlockPos spot = base.offset(mob.getRandom().nextInt(ARRIVAL_SPREAD * 2 + 1) - ARRIVAL_SPREAD, 0,
-				mob.getRandom().nextInt(ARRIVAL_SPREAD * 2 + 1) - ARRIVAL_SPREAD);
-			Vec3 there = Vec3.atBottomCenterOf(spot);
-			if (level.noCollision(mob, mob.getBoundingBox().move(there.subtract(mob.position())))
-					&& !level.getBlockState(spot.below()).getCollisionShape(level, spot.below()).isEmpty()) {
-				return there;
-			}
-		}
-		return player.position();
 	}
 }
