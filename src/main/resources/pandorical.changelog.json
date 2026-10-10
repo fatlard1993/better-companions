@@ -3,6 +3,10 @@
     "Sixteen more animals can be befriended, and will follow, wait and fight alongside you the way only a wolf could before."
   ],
   "versions": {
+    "1.1.1": [
+      "Friend on the Companions menu picks who your companions leave alone, by face.",
+      "Whistle, Unequip and Release are a Companions action menu of their own, rather than mixed into the server's."
+    ],
     "1.1.0": [
       "A whistle reaches every companion you have, asleep in an unloaded chunk or in another dimension.",
       "Ones already at your heel stay put, and anything on a lead or being ridden is left alone.",

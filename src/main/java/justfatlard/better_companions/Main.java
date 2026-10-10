@@ -114,16 +114,17 @@ public class Main implements ModInitializer {
 			Whistle::blow);
 		PandoricalApi.keybinds().register(MOD_ID + ":pet", 19, "Pet Animal",
 			Petting::pet);
-		// Whistling is worth a button: it is occasional, and easy to forget there is a key for.
-		// Petting is not - it is a right-click on the animal, and a menu would be the slow way.
-		PandoricalApi.actionMenus().promoteKeybind(MOD_ID + ":whistle", "minecraft:goat_horn");
-
-		// Releasing is a command rather than a key, so it is offered as a button of its own. A key
-		// on purpose it is not: this is the one thing here that cannot be undone, and a menu you
-		// have to open is the right amount of deliberate for it. A lead for the icon, since the
-		// button's whole subject is the tie between a person and an animal.
-		PandoricalApi.actionMenus().suggestButton(ActionMenuApi.Button.runs(
-			"minecraft:lead", "Release", "companions release"));
+		// A menu of its own, so the companions' few occasional things are together rather than
+		// scattered through the server's. Whistling is worth a button: it is occasional, and easy to
+		// forget there is a key for. Petting is not - it is a right-click on the animal, and a menu
+		// would be the slow way. Releasing is the one thing here that cannot be undone, so it is a
+		// button and never a key: a menu you have to open is the right amount of deliberate for it.
+		PandoricalApi.actionMenus().suggestMenu(MOD_ID + ":companions", "Companions", java.util.List.of(
+			ActionMenuApi.Button.runs("minecraft:goat_horn", "Whistle", "companions whistle"),
+			ActionMenuApi.Button.runs("minecraft:leather_horse_armor", "Unequip", "companions unequip"),
+			ActionMenuApi.Button.runs("minecraft:lead", "Release", "companions release"),
+			// Friends your companions leave alone, picked by face.
+			ActionMenuApi.Button.runs("minecraft:player_head", "Friend", "companions friend add {players}")));
 
 		PandoricalApi.commandHelp().describe("/companions whistle", "Call every companion of yours to you.");
 		PandoricalApi.commandHelp().describe("/companions pet", "Make a fuss of the nearest animal.");
