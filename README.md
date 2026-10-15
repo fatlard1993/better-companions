@@ -1,8 +1,6 @@
 # Better Companions
 
-Sixteen more animals can be befriended, and will follow, wait and fight alongside you the way only a wolf could before.
-
-Server-side; Pandorical carries the client's half (the whistle keybind). Nothing is replaced: a companion cow is still a cow, with a note attached saying whose it is, so everything else that knows about cows keeps working.
+Sixteen more animals can be befriended, and will follow, wait and fight alongside you the way a wolf does. A companion cow is still a cow, so everything else that knows about cows keeps working with it.
 
 ## Befriending
 
@@ -10,111 +8,95 @@ Server-side; Pandorical carries the client's half (the whistle keybind). Nothing
 
 | | | | |
 |---|---|---|---|
-| Fox — sweet berries | Panda — bamboo | Pig — carrot | Rabbit — carrot |
-| Chicken — wheat seeds | Cow — wheat | Mooshroom — wheat | Sheep — wheat |
-| Goat — wheat | Ocelot — cod | Armadillo — spider eye | Bee — honeycomb |
-| Frog — slimeball | Axolotl — tropical fish | Polar bear — salmon | Snow golem — snowball |
+| Fox - sweet berries | Panda - bamboo | Pig - carrot | Rabbit - carrot |
+| Chicken - wheat seeds | Cow - wheat | Mooshroom - wheat | Sheep - wheat |
+| Goat - wheat | Ocelot - cod | Armadillo - spider eye | Bee - honeycomb |
+| Frog - slimeball | Axolotl - tropical fish | Polar bear - salmon | Snow golem - snowball |
 
-The offering is the one the game already gave the animal an opinion about, so there is no second table to learn. It is also what mends the animal once it is yours, so the table is worth carrying rather than looking up twice. With **block-tip** installed, looking at an animal tells you what it wants, and looking at a hurt companion names the same item again.
+It has to be a crouch: for most of the table the offering is also what breeds the animal, and an ordinary click still feeds it exactly as before. The same item mends the animal once it is yours.
 
-Crouching is what separates befriending from feeding, and it has to, because for most of this table they are the same item: wheat breeds a cow, a carrot breeds a pig, a slime ball breeds a frog. On an ordinary click the animal is fed exactly as it always was. Without the crouch, the first wheat handed to each of twenty cows would befriend it rather than breed it, and a farm would quietly become a herd that follows you home.
+**Wolves, cats and parrots** are tamed the way the game already tames them. They are companions here too, and everything below applies to them.
 
-Told to wait, an animal the game already has a sitting pose for uses its own; everything else is posed by the mod. Those poses name the bones of more than one body plan, because a frog's legs and a cow's are spelled differently and an animation skips a bone the model has not got - so a pose aimed at the wrong parts does not look broken, it looks like nothing happened at all.
+## Controls
 
-**Wolves, cats and parrots are not on the list** — the game already tames those. They are companions here too and everything below applies to them; they simply arrive already tamed.
+- **Crouch and click with an empty hand** on your own companion: wait here, or come along again. One order for every companion, a wolf included. A cow still takes a bucket, a sheep shears and a mooshroom a bowl, because the order needs an empty hand.
+- **Plain click with an empty hand** on any animal: pet it (below). On a mount (a horse, a nautilus, a happy ghast, anything saddled) that click rides it instead, and on an animal on your own lead it lets the lead off; use the pet key or command for those.
+- **Plain click with its offering** on a hurt companion, anyone's: two hearts back. At full health the click means what it always meant, so a pen of companions is farmed as before.
+- **Click with horse armour**: puts it on (see Companion armour).
+- **V** whistles. A second key pets. Both are in your controls screen under "Pandorical" and rebind like any other; the pet key may arrive unbound, so bind it there or use the command.
 
-## Living with one
+| Command | Does |
+|---|---|
+| `/companions whistle` | Calls every companion you have |
+| `/companions pet` | Pets the animal you are looking at, or the nearest within reach |
+| `/companions unequip` | Takes the armour off your nearest companion within 8 blocks |
+| `/companions release` | Lets your nearest companion within 8 blocks go for good |
+| `/companions friend add <player>` | Adds a friend |
+| `/companions friend remove <name>` | Removes one |
+| `/companions friend list` | Lists yours |
+| `/companions friend all` | Operators only: everyone online befriends everyone, both ways |
 
-There are three things you can tell a companion: come along, wait here, and go free.
+Whistle, Unequip, Release and Friend are also offered as action-menu buttons.
 
-- **Sneak and click with an empty hand** tells a companion to wait, or to come along again: one order for every animal you have fed into your company, a wolf included. It is specifically an *empty* hand and a crouch, so a cow still takes a bucket, a sheep still takes shears, a mooshroom still takes a bowl.
-- **A plain click with an empty hand** is a hand on them: the petting below, without reaching for the key. Not on a mount - a horse, a nautilus, anything saddled - where that click is how you climb on; pet a mount with the key.
-- **`/companions release`** lets the nearest one go for good. It keeps nothing: the owner, the stay order, the pose and the line in the roster all go, so the animal is wild in every sense rather than one the mod still has opinions about. Offer it the same thing again and it comes back; a wolf, a cat or a parrot wants what the game asks for, as it did the first time. Any armour it was wearing comes back to you, wherever you are standing, because barding walking off inside an animal nobody owns is a loss nobody chose.
+## Following, waiting and fighting
 
-  The nearest one, and close, because this is the end of the relationship and the animal you are standing next to is the one you mean. Letting go of one you cannot see is the menu's job, below. There is a **Release** button offered for your action menus too, and deliberately no keybind: the one thing here that cannot be undone should not be one key away.
-- **They fight for you.** A companion takes your side whether you started it or not — but never against a friend.
-- **Feed a hurt one to mend it.** A plain click with the same item that won the animal over puts two hearts back, the way meat has always mended a wolf. Only while it is hurt: at full health that click still means what it always meant, so wheat breeds a cow and a carrot breeds a pig and a pen full of companions is farmed exactly as before. Anyone's companion, not only your own.
-- **They settle in.** After five minutes of waiting, a companion stops standing to attention: it potters about within a few blocks of where you left it and lies down for a while at a time. It is still where you left it when you come back. A dog or a cat told to sit does the same, getting up now and then to sit down somewhere else nearby; it is still told to sit, so it neither follows nor fights.
-- **They come through portals with you.** Companions following you, within sixteen blocks of where you step through, come out beside you on the far side. One told to wait stays where it is.
-- **`/companions whistle`**, or the keybind (V by default, rebindable), calls everyone in. Every companion you have, wherever it is: across the world, or out of another dimension. The ones already at your heel stay where they stand, anything further is put down nearby and walks the rest, so they arrive walking rather than appearing at your elbow. One on a lead or under a rider is being held by something more deliberate than a whistle and stays where it is. A whistle cancels a stay order — the newer instruction wins.
+- **They fight for you**, whether you started it or not, and fight back when something hits them. Never against a friend (see Friends).
+- **They settle in.** A waiting companion sits. After five minutes it potters about within a few blocks of where you left it and lies down now and then. It is still there when you come back. A dog or cat told to sit does the same, and stays told to sit, so it neither follows nor fights.
+- **They come through portals with you.** Companions following you within 16 blocks of where you step through come out beside you on the far side. One told to wait, on a lead, or with a rider stays behind.
+- **The whistle reaches all of them**, anywhere in the world or in another dimension. Those already within 12 blocks stay where they stand; the rest are put down nearby and walk the last stretch. One on a lead or carrying a rider stays put. A whistle cancels a stay order.
 
-  Most of them are not there to be called: an animal in a chunk nobody is standing in is in no list the game will hand out. So each companion writes down which chunk it went to sleep in, a whistle wakes those chunks, and the count arrives half a second after the sound rather than with it.
-
-## The list
-
-The Better Companions page of the mods menu lists **everything that follows you**, nearest first, with this dimension before anywhere else: `Rex - nearby`, `Cow - 312 blocks away`, `Panda - the nether`. Twenty animals scattered across three dimensions is a thing nobody can otherwise see, and the question the page is nearly always answering is *which one did I lose*.
-
-It is read from the mod's own record rather than from the world, because most of what it lists is asleep in a chunk nobody is standing in — the same record a whistle reads. Each line has a button that lets that one go, and it works on a sleeping animal: the chunk is woken, the animal released, and the line goes.
-
-**The button has no second press.** It is the same release as the command and it is immediate, so a misclick costs you that companion — re-tameable, and your armour comes back, but gone.
+The whistle only knows about a companion once it has been loaded with this mod installed. One left somewhere before that and not visited since will not answer; walk past it once and it will.
 
 ## Petting
 
-**A plain empty-hand click**, the pet keybind, or `/companions pet`, makes a fuss of whichever animal you are touching or looking at, yours, anyone's or nobody's (on a mount the click rides it, so a mount is petted with the key or the command, and on an animal on your lead it lets it off): your hand swings out and strokes it twice, it tips its head, gives a little hop and wags whatever tail it has, there are hearts, and it makes its own contented noise - the one the game already agrees that animal makes, rather than a table of one sound per species that somebody has to keep in step with every animal ever added.
+Petting works on any animal, yours, anyone's or nobody's. Your hand strokes it, it tips its head, hops, wags whatever tail it has, shows hearts and makes its own contented noise. Looking straight at an animal picks that one; otherwise the nearest within 4 blocks does. A sitting or lying companion stays sitting or lying through it. It has no other effect.
 
-Looking straight at one always wins. Looking at nothing in particular, the nearest within arm's reach will do, because being in the middle of your own herd and pressing the button should not require aim.
+## Releasing
 
-An animal the mod has sitting or lying down stays sitting or lying through it.
+`/companions release`, or the Release button, lets a companion go. The owner, the stay order and its line in the list all go, and any armour it wore comes back to you wherever you are. Offer it the same thing again and it comes back; a wolf, cat or parrot wants what the game asks for.
 
-It does nothing else, and that is the point. A companion already follows, waits and fights, and none of that ever gives you a reason to touch it.
+To let go of one that is not beside you, use the companion list: the Better Companions page of the mods menu lists everything that follows you, nearest first and this dimension first (`Rex - nearby`, `Cow - 312 blocks away`, `Panda - the nether`). Each line has a button that releases that one, including companions asleep in unloaded chunks. **The button has no second press**: a misclick costs you that companion.
 
-The keybind lives in the same pool the whistle does, so it appears in your normal controls screen under "Pandorical" and rebinds like any other key. A pool slot can arrive unbound, which is why there is a command for it too.
+## Getting hit
 
-## What the village makes of it
+A companion never fights back against its owner or a friend. Anyone else gets the first hit free. A second hit from the same player within 8 seconds of the first and the companion fights back against them. Any other mob that hits it is answered straight away.
 
-With [village-quests](https://github.com/fatlard1993/village-quests) installed, villagers notice. The whole remark rests on the one fact this mod created that nothing else will comment on: a cow that follows a person. The shepherd has spent a life getting animals to do that on purpose and failing. The farmer has spent two seasons on a fence you walked a pig straight past. The butcher has had a thousand animals through the shop and not one of them ever chose somebody.
-
-Dogs are exempt, because wolves, cats and parrots were tameable before this mod and nobody would look twice. The lines name whatever is actually at your heel, so it is a cow or a polar bear or a bee and never "an animal".
-
-## Forgiveness
-
-**The first hit is free.** Catching your own animal by accident is the commonest thing that happens in a crowded pen, and a companion that turns on you for it is one you stop keeping. A second blow within eight seconds is not a slip, and is treated as one.
-
-Grudges live in memory and die with the server: an animal left alone since yesterday has no reason to still be cross.
+Grudges are forgotten when the server restarts.
 
 ## Friends
 
-Nobody on your list is ever a target of your companions, whoever swung first. A stray hit from a friend in a shared fight is not a reason for your dogs to go for their throat.
+Nobody on your friends list is ever a target of your companions, whoever swung first. Friends also include:
 
-```
-/companions friend add <player>
-/companions friend remove <name>
-/companions friend list
-/companions friend all        (operators: everyone online befriends everyone, both ways)
-```
+- anyone on your vanilla scoreboard team, however the team was set;
+- anyone else's companion whose owner is your friend.
 
-**Vanilla teams count too.** Anyone on the owner's scoreboard team is a friend automatically — reading the game's own answer rather than keeping a second list that means the same thing, which gets plugins and anything else that sets teams for free. So does anyone else's companion whose owner is a friend: turning on a friend's dog is the same unkindness as turning on the friend.
+Each player keeps their own list. It is also on the Better Companions page of the mods menu, where you can take a friend off.
 
-Each player names their own friends: who you trust around your animals is your call, and a friend of yours is no promise about anyone else's pack. The list is also on the Better Companions page of the mod menu, where a friend can be taken off again.
+These rules apply to the game's own tamed wolves, cats and parrots too: they keep their vanilla following and sitting, but never go for a friend.
 
-These rules hold for the game's own tamed animals too. A wolf, a cat or a parrot keeps the game's own following, sitting and taking-your-side, but whatever it is about to go for is checked against your friends and against the animals you have fed or asked to be left alone. A friend is never a target, whoever swung first, the same promise the list makes everywhere else. A passive mob that strikes the wolf itself is still answered: that one is the wolf's own business.
+## Farm animals
 
-**Farm animals are not a fight.** The pack takes your side against whatever you swing at, and a cow you are butchering looks like a fight to them. Two things stop it. An animal you have fed in the last five minutes is left alone whatever you do to it: that is a farm, and the swing is your own business. And the Better Companions page of the mods menu has a switch, *Leave passive mobs alone*, that keeps your companions out of fights with animals, villagers and golems altogether. It is off by default and each player's own. They still fight back when one of those goes for them.
+Your companions join in when you hit a cow. Two things keep them out of it:
+
+- An animal you have fed in the last five minutes is left alone, whatever you do to it.
+- **Leave passive mobs alone**, a switch on the Better Companions page of the mods menu, keeps your companions out of fights with animals, villagers and golems altogether. Off by default, and each player's own. Companions still defend themselves when one of those attacks them.
 
 ## Companion armour
 
-Horse armour fits any companion. Six tiers already exist, already balanced, already crafted from the obvious things, and they only ever fitted one animal — so nothing new is added, the existing barding is simply allowed onto anything that walks with you. Right-click a companion holding it; take it back with `/companions unequip`.
+Horse armour, in all six tiers, fits any companion. Right-click a companion with it to put it on; take it off with `/companions unequip`. Protection comes from the item's own stats, and it drops when the companion dies. A sheep's wool covers it until the sheep is sheared.
 
-On a Pandorical client it is called what it is - Leather Companion Armor through Netherite Companion Armor - and drawn as a plate over a back rather than a horse, in each tier's own colours. Same item, same recipe, same protection; a vanilla client sees the horse.
+On a snow golem it is a coat as well: an armoured snow golem does not melt in warm biomes or in the rain.
 
-**And it is drawn on the animal wearing it.** The game only ever drew barding on a horse; here every companion wears its armour visibly, a plate over the back and sides with the tier's blanket on top, painted in the animal's own skin layout so it follows every joint the animal has. Twenty-one shapes, six tiers each, and the cold and warm cows and the cold pigs and chickens get their own since they are their own models. It is painted on the skin rather than standing off it, the way vanilla paints a wolf's collar, and it needs the Pandorical client to be seen. A sheep's wool covers it until the sheep is sheared. Babies wear it too, in armour of their own: a baby has been its own model since 26.3, with its own skin layout, so each one's plates are painted onto that layout by `generate_baby_armor.py` from the game's own baby models, the same plates and blanket at a baby's size.
+With Pandorical on the client, the armour is called Leather through Netherite Companion Armor, has its own icon, and is drawn on the animal wearing it, babies included. It is painted onto the skin, the way a wolf's collar is, rather than modelled standing off the body.
 
-It sits in the same body slot the game uses for a horse's barding and a wolf's armour, so the protection comes from the item's own attributes rather than a number invented here, and it drops when the companion does. On a snow golem it is a coat as well: an armoured golem does not melt in the heat or the rain, so it can follow you out of the tundra and back.
+## With other mods
 
-## Poses
-
-A waiting companion sits up; a settled one lies down. Where the game already drew a pose it is used — a fox curls, a panda and the game's own tamed animals sit — because those were drawn for that animal. Everything else gets one of the mod's own animations, played through Pandorical, naming the parts vanilla's four-legged models all share, so the same two poses serve a cow, a pig, a sheep and a goat without knowing which is which.
-
-## What this does not do
-
-- **A whistle cannot reach an animal the world has never mentioned.** The chunk each companion sleeps in is written down the first time it loads under this mod, so a companion left somewhere before the mod was installed and not visited since is not on the list and will not answer. Walk past it once and it is.
-- **Armour is painted, not modelled.** It sits on the skin rather than standing off the body, so it reads as plate rather than as a saddle-shaped slab. Wolves could get vanilla's own raised wolf armour model by adding a wolf layer to the horse armour equipment assets; that is one animal on a second path, and has not been done.
+- [block-tip](https://github.com/fatlard1993/block-tip): looking at a wild animal tells you what befriends it; looking at a companion says whether it is yours and whether it is waiting, and what will mend it if it is hurt.
+- [village-quests](https://github.com/fatlard1993/village-quests): shepherds, farmers, butchers and cartographers remark on whatever animal is following you. Wolves, cats and parrots do not earn a comment.
 
 ## Pandorical
 
-Pandorical is required on the server. Better Companions uses it for the whistle and pet keybinds, for the sit and lie-down animations on animals the game never drew a pose for, for the riding tweaks (two riders, free look), to give the armour its name and its icon, and to draw it on the animal wearing it.
-
-**The Pandorical mod must be installed client-side** for those. Without it a companion still follows, waits and fights, but the whistle has no key, an animal without a vanilla pose stands still instead of settling, and the riding tweaks are off. Block Tip, if installed, says of a companion you look at whether it is yours and whether it is waiting, of a hurt one what will mend it, and of a wild one what would befriend it. The companion list and the friend list are both on the Better Companions page of the mods menu, which is Pandorical's.
+Better Companions goes on the server, and **Pandorical is required there**. It adds no new items, so a vanilla client can connect: its companions still follow, wait, fight and wear armour. Without Pandorical on the client, though, there are no whistle or pet keys (the commands still work), animals without a vanilla pose stand instead of sitting or lying down, the armour looks like horse armour and is not drawn on the animal, the riding tweaks (two riders on a mount, free look) are off, and there is no mods menu for the companion list, friends list or passive-mobs switch.
 
 ## Development
 
