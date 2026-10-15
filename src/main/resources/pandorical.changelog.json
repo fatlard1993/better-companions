@@ -3,6 +3,9 @@
     "Sixteen more animals can be befriended, and will follow, wait and fight alongside you the way only a wolf could before."
   ],
   "versions": {
+    "1.1.2": [
+      "The mod's description counts sixteen animals, as there are, not seventeen."
+    ],
     "1.1.1": [
       "Friend on the Companions menu picks who your companions leave alone, by face.",
       "Whistle, Unequip and Release are a Companions action menu of their own, rather than mixed into the server's."
