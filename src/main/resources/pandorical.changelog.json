@@ -3,6 +3,9 @@
     "Sixteen more animals can be befriended, and will follow, wait and fight alongside you the way only a wolf could before."
   ],
   "versions": {
+    "1.1.6": [
+      "A demo to play in PvP Dimensions' onboarding."
+    ],
     "1.1.5": [
       "Drop changelog notes for changes nothing in the game shows."
     ],
