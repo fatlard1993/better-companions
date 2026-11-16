@@ -63,6 +63,10 @@ public final class CompanionPoses {
 		HELD.remove(mob);
 	}
 
+	public static void clear() {
+		HELD.clear();
+	}
+
 	public static void set(Mob mob, Pose pose) {
 		boolean settled = pose != Pose.STANDING;
 		if (pose == Pose.STANDING) HELD.remove(mob.getUUID());

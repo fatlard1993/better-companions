@@ -41,6 +41,7 @@ public final class Grudges {
 			&& previous.striker().equals(striker.getUUID())
 			&& gameTime - previous.at() <= FORGIVENESS_WINDOW_TICKS;
 
+		LAST_STRIKE.values().removeIf(old -> gameTime - old.at() > FORGIVENESS_WINDOW_TICKS);
 		LAST_STRIKE.put(id, new Strike(striker.getUUID(), gameTime, repeat));
 		return repeat;
 	}
@@ -57,5 +58,9 @@ public final class Grudges {
 
 	public static void forget(Mob companion) {
 		LAST_STRIKE.remove(companion.getUUID());
+	}
+
+	public static void clear() {
+		LAST_STRIKE.clear();
 	}
 }

@@ -3,12 +3,14 @@ package justfatlard.better_companions;
 import java.util.Objects;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import justfatlard.pandorical.api.ActionMenuApi;
 import justfatlard.pandorical.api.PandoricalApi;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +53,17 @@ public class Main implements ModInitializer {
 		// chunk to wake. Everything else the mod does needs the animal in hand; this is the one
 		// question asked about animals that are not.
 		ServerEntityEvents.ENTITY_UNLOAD.register((entity, level) -> {
-			if (entity instanceof Mob mob && Companions.hasOwner(mob)) Roster.noteOrForget(mob);
+			if (!(entity instanceof Mob mob)) return;
+			if (Companions.hasOwner(mob)) Roster.noteOrForget(mob);
+
+			// A companion that comes back starts its goals over, and they set its pose afresh.
+			CompanionPoses.forget(mob.getUUID());
+			Entity.RemovalReason reason = mob.getRemovalReason();
+			if (reason != null && reason.shouldDestroy()) Grudges.forget(mob);
+		});
+		ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
+			Grudges.clear();
+			CompanionPoses.clear();
 		});
 
 		UseEntityCallback.EVENT.register(TameInteraction::onUseEntity);
