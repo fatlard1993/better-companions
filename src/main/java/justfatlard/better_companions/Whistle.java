@@ -233,6 +233,7 @@ public final class Whistle {
 	private static void bringCloser(ServerPlayer player, Mob mob) {
 		if (!(player.level() instanceof ServerLevel here)) return;
 		if (mob.isPassenger() || mob.isLeashed()) return;
+		if (justfatlard.pandorical.api.PandoricalApi.loans().onLoan(player) != null) return;
 
 		boolean elsewhere = mob.level() != here;
 		if (!elsewhere && mob.distanceToSqr(player) < ALREADY_HERE * ALREADY_HERE) return;

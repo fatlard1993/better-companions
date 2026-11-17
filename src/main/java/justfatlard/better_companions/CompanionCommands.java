@@ -89,6 +89,13 @@ public final class CompanionCommands {
 	 * have meant taking one of those away.
 	 */
 	private static int unequipNearby(ServerPlayer player) {
+		// What they carry is lent, and goes back when the loan ends: armour put in it would go with it.
+		Component lent = justfatlard.pandorical.api.PandoricalApi.loans().onLoan(player);
+		if (lent != null) {
+			player.sendSystemMessage(Component.translatableWithFallback("command.better-companions-justfatlard.unequip.on_loan",
+				"Not while %s: the armour would be lost with what you are carrying.", lent));
+			return 0;
+		}
 		var nearby = nearest(player, mob -> !CompanionArmor.worn(mob).isEmpty());
 
 		if (nearby.isEmpty() || !CompanionArmor.unequip(player, nearby.getFirst())) {

@@ -51,6 +51,8 @@ public final class PortalFollow {
 	private static void bring(ServerPlayer player, ServerLevel origin, ServerLevel destination) {
 		Seen seen = lastSeen.get(player.getUUID());
 		if (seen == null || seen.level() != origin || player.isSpectator()) return;
+		// Into somewhere that lends the player a pack of its own (a bench's workshop, an arena): the party waits outside.
+		if (justfatlard.pandorical.api.PandoricalApi.loans().onLoan(player) != null) return;
 
 		List<Mob> party = origin.getEntitiesOfClass(Mob.class, new AABB(seen.position(), seen.position()).inflate(BEHIND),
 			mob -> mob.isAlive() && Companions.isOwnedBy(mob, player) && !Companions.isSitting(mob)
