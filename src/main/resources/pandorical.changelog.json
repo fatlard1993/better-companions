@@ -3,6 +3,9 @@
     "Sixteen more animals can be befriended, and will follow, wait and fight alongside you the way only a wolf could before."
   ],
   "versions": {
+    "1.1.9": [
+      "Describes itself in one short line of what it adds."
+    ],
     "1.1.8": [
       "Companions wait outside places that lend you a pack of their own, such as a Miniature Bench's workshop or an arena, and their armour can't be taken off into a lent pack, where it would be lost."
     ],
